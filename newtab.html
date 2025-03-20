@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Tab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Delius&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="body-container">
+    <div class="body-container delius-regular">
       <div class="theme-switcher">
         <span class="theme-label" id="themeText">Light</span>
         <label class="switch">
@@ -15,6 +21,7 @@
           <span class="slider round"></span>
         </label>
       </div>
+      <div class="location-info" id="locationInfo"></div>
       <div class="clock-container">
         <div class="time" id="time">00:00:00</div>
         <div class="date-info">
@@ -27,7 +34,6 @@
             </label>
           </div>
         </div>
-        <div class="location-info" id="locationInfo"></div>
       </div>
     </div>
     <script src="script.js"></script>
