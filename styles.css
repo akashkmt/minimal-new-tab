@@ -1,64 +1,139 @@
 body {
   margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  transition: background-color 0.3s;
-}
-
-.container {
-  text-align: center;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f0f0f0;
+  color: #000;
   transition: background-color 0.3s, color 0.3s;
 }
 
-#time {
-  font-size: 48px;
-  font-weight: bold;
-}
-#date {
-  font-size: 24px;
-  margin: 10px 0;
-}
-#weather {
-  font-size: 18px;
-  margin: 10px 0;
+.body-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  position: relative;
 }
 
-.settings {
-  margin-top: 20px;
+body.dark {
+  background-color: #1a1a1a;
+  color: #fff;
 }
 
-select {
-  margin: 0 5px;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-/* Themes */
 body.light {
   background-color: #f0f0f0;
-}
-body.dark {
-  background-color: #2c3e50;
-}
-body.blue {
-  background-color: #3498db;
+  color: #000;
 }
 
-.container.light {
-  background: white;
-  color: #333;
+.clock-container {
+  text-align: center;
+  color: inherit;
+  padding: 40px;
 }
-.container.dark {
-  background: #34495e;
-  color: #ecf0f1;
+
+.time {
+  font-size: 150px;
+  font-weight: bold;
+  letter-spacing: 8px;
 }
-.container.blue {
-  background: #2980b9;
-  color: #ecf0f1;
+
+.time span {
+  display: inline-block;
+}
+
+.date-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-top: 30px;
+  font-size: 18px;
+  color: inherit;
+}
+
+.current-label {
+  font-weight: bold;
+}
+
+.date {
+  font-weight: bold;
+}
+
+.toggle-switch,
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-label,
+.theme-label {
+  font-size: 16px;
+  color: inherit;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #000;
+}
+
+input:checked + .slider:before {
+  transform: translateX(32px);
+}
+
+.slider.round {
+  border-radius: 28px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.location-info {
+  margin-top: 20px;
+  font-size: 16px;
+  color: inherit;
+}
+
+.theme-switcher {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
