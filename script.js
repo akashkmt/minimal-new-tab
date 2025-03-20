@@ -5,7 +5,7 @@ const formatText = document.getElementById("formatText");
 const locationInfoElement = document.getElementById("locationInfo");
 const themeToggle = document.getElementById("themeToggle");
 const themeText = document.getElementById("themeText");
-let is24Hour = true;
+let is24Hour = false;
 
 function updateTime() {
   const now = new Date();
@@ -37,7 +37,6 @@ function updateDate() {
 
 toggleButton.addEventListener("change", () => {
   is24Hour = toggleButton.checked;
-  formatText.textContent = is24Hour ? "24h" : "12h";
   updateTime();
 });
 
