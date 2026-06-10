@@ -1,6 +1,8 @@
 /* ── Reset & Base ──────────────────────────────────────────────────────────── */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -9,12 +11,10 @@
 :root {
   --font-main: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Mono", monospace;
-
-  /* light */
   --bg: #f7f6f3;
   --surface: #eeede9;
   --surface-hover: #e4e2dc;
-  --border: rgba(0,0,0,0.08);
+  --border: rgba(0, 0, 0, 0.08);
   --text: #1a1916;
   --text-secondary: #7a7870;
   --accent: #1a1916;
@@ -22,16 +22,17 @@
   --seg-active-bg: #1a1916;
   --seg-active-fg: #f7f6f3;
   --search-bg: #eeede9;
-  --search-border: rgba(0,0,0,0.12);
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --search-border: rgba(0, 0, 0, 0.12);
   --panel-bg: #faf9f7;
+  --panel-card: #f0efe9;
+  --green: #22c55e;
 }
 
 body[data-theme="dark"] {
   --bg: #111110;
   --surface: #1c1b19;
   --surface-hover: #252422;
-  --border: rgba(255,255,255,0.07);
+  --border: rgba(255, 255, 255, 0.07);
   --text: #e8e6e1;
   --text-secondary: #78766f;
   --accent: #e8e6e1;
@@ -39,9 +40,9 @@ body[data-theme="dark"] {
   --seg-active-bg: #e8e6e1;
   --seg-active-fg: #111110;
   --search-bg: #1c1b19;
-  --search-border: rgba(255,255,255,0.1);
-  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.4);
+  --search-border: rgba(255, 255, 255, 0.1);
   --panel-bg: #161614;
+  --panel-card: #1c1b19;
 }
 
 body {
@@ -49,17 +50,20 @@ body {
   color: var(--text);
   font-family: var(--font-main);
   min-height: 100vh;
-  transition: background-color 0.25s, color 0.25s;
+  transition:
+    background-color 0.25s,
+    color 0.25s;
 }
 
-/* ── Page Layout ───────────────────────────────────────────────────────────── */
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
 
 .page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 40px 20px;
+  padding: 0;
+  position: relative;
 }
 
 .main {
@@ -69,9 +73,19 @@ body {
   gap: 12px;
   width: 100%;
   max-width: 640px;
+  padding: 0 24px;
+  pointer-events: none; /* let clicks through to canvas behind */
 }
 
-/* ── Gear Button ────────────────────────────────────────────────────────────── */
+/* re-enable pointer events on interactive children */
+.main a,
+.main button,
+.main input,
+.main form {
+  pointer-events: all;
+}
+
+/* ── Gear ───────────────────────────────────────────────────────────────────── */
 
 .gear-btn {
   position: fixed;
@@ -87,10 +101,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s, transform 0.2s;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.2s;
   z-index: 10;
 }
-
 .gear-btn:hover {
   background: var(--surface-hover);
   color: var(--text);
@@ -108,7 +124,6 @@ body {
   gap: 10px;
 }
 
-/* Day progress */
 .widget-progress {
   display: flex;
   flex-direction: column;
@@ -116,7 +131,6 @@ body {
   gap: 6px;
   width: 220px;
 }
-
 .wp-bar-wrap {
   width: 100%;
   height: 3px;
@@ -124,21 +138,18 @@ body {
   border-radius: 99px;
   overflow: hidden;
 }
-
 .wp-bar {
   height: 100%;
   background: var(--text-secondary);
   border-radius: 99px;
   transition: width 1s linear;
 }
-
 .wp-label {
   font-size: 12px;
   color: var(--text-secondary);
   letter-spacing: 0.02em;
 }
 
-/* Quote */
 .widget-quote {
   display: flex;
   flex-direction: column;
@@ -147,21 +158,18 @@ body {
   max-width: 420px;
   text-align: center;
 }
-
 .wq-text {
   font-size: 14px;
   color: var(--text-secondary);
   font-style: italic;
   line-height: 1.5;
 }
-
 .wq-attr {
   font-size: 12px;
   color: var(--text-secondary);
   opacity: 0.6;
 }
 
-/* Week */
 .widget-week {
   display: flex;
   align-items: center;
@@ -169,7 +177,6 @@ body {
   font-size: 13px;
   color: var(--text-secondary);
 }
-
 .ww-dot {
   opacity: 0.35;
 }
@@ -203,19 +210,17 @@ body {
   color: var(--text-secondary);
   height: 20px;
 }
-
 .weather-icon {
   font-size: 16px;
   line-height: 1;
 }
-
 .weather-loc::before {
   content: "·";
   margin-right: 6px;
   opacity: 0.4;
 }
 
-/* ── Search Bar ─────────────────────────────────────────────────────────────── */
+/* ── Search ─────────────────────────────────────────────────────────────────── */
 
 .search-bar {
   position: relative;
@@ -223,7 +228,6 @@ body {
   max-width: 440px;
   margin-top: 16px;
 }
-
 .search-icon {
   position: absolute;
   left: 14px;
@@ -232,7 +236,6 @@ body {
   color: var(--text-secondary);
   pointer-events: none;
 }
-
 .search-input {
   width: 100%;
   padding: 12px 16px 12px 40px;
@@ -242,15 +245,14 @@ body {
   color: var(--text);
   font-family: var(--font-main);
   font-size: 15px;
-  font-weight: 400;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
-
 .search-input::placeholder {
   color: var(--text-secondary);
 }
-
 .search-input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
@@ -279,18 +281,443 @@ body {
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
-  transition: background 0.12s, transform 0.1s;
+  transition:
+    background 0.12s,
+    transform 0.1s;
 }
-
 .quick-link:hover {
   background: var(--surface-hover);
   transform: translateY(-1px);
 }
-
 .link-favicon {
   width: 16px;
   height: 16px;
   border-radius: 3px;
+}
+.settings-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Floating Panels (canvas) ───────────────────────────────────────────────── */
+
+.panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.15s;
+  z-index: 20;
+  user-select: none;
+}
+
+.panel.dragging,
+.panel.resizing {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  z-index: 30;
+}
+
+.panel-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 0;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.panel.dragging .panel-hd {
+  cursor: grabbing;
+}
+
+.panel-body {
+  padding: 12px 16px 16px;
+  flex: 1;
+  overflow: auto;
+}
+
+.panel-body-fill {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+.panel-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Resize handle — bottom-right corner */
+.resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.panel:hover .resize-handle {
+  opacity: 1;
+}
+
+.resize-handle::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
+  border-radius: 1px;
+}
+
+/* ── Todos ──────────────────────────────────────────────────────────────────── */
+
+.todo-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+
+.todo-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 4px; border-radius: 8px;
+  transition: background 0.1s;
+}
+.todo-row:hover { background: var(--surface-hover); }
+.todo-row:hover .todo-del { opacity: 1; }
+
+.todo-check {
+  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+  border: 1.5px solid var(--border); background: transparent;
+  color: #fff; font-size: 11px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, border-color 0.12s;
+}
+.todo-row.done .todo-check { background: var(--green); border-color: var(--green); }
+
+.todo-label {
+  flex: 1; font-size: 14px; color: var(--text); outline: none;
+  cursor: text; line-height: 1.4;
+}
+.todo-row.done .todo-label { text-decoration: line-through; color: var(--text-secondary); }
+
+.todo-del {
+  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+  border: none; background: transparent; color: var(--text-secondary);
+  font-size: 11px; cursor: pointer; opacity: 0;
+  transition: opacity 0.12s, color 0.12s;
+  display: flex; align-items: center; justify-content: center;
+}
+.todo-del:hover { color: #ef4444; }
+
+.todo-add-form {
+  display: flex; gap: 6px; align-items: center;
+  border-top: 1px solid var(--border); padding-top: 8px;
+}
+
+.todo-add-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: var(--font-main); font-size: 13px; color: var(--text);
+}
+.todo-add-input::placeholder { color: var(--text-secondary); }
+
+.todo-add-btn {
+  width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); font-size: 16px; cursor: pointer; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+.todo-add-btn:hover { background: var(--accent); color: var(--accent-fg); }
+
+/* ── Pomodoro ───────────────────────────────────────────────────────────────── */
+
+.pomo-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.pomo-badge[data-mode="break"] {
+  background: #bbf7d0;
+  color: #15803d;
+}
+body[data-theme="dark"] .pomo-badge[data-mode="break"] {
+  background: #14532d;
+  color: #86efac;
+}
+
+.pomo-timer {
+  font-family: var(--font-mono);
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--text);
+  text-align: center;
+}
+
+.pomo-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.pomo-btn-primary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.pomo-btn-primary:hover {
+  opacity: 0.85;
+}
+
+.pomo-btn-ghost {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.pomo-btn-ghost:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.pomo-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.pomo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s;
+}
+.pomo-dot.filled {
+  background: var(--accent);
+}
+
+.pomo-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pomo-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pomo-setting-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  width: 36px;
+}
+.pomo-num-input {
+  width: 60px;
+}
+.pomo-setting-unit {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── Habits ─────────────────────────────────────────────────────────────────── */
+
+.habits-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.habit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  min-width: 160px;
+}
+.habit-item.done {
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 8%, var(--surface));
+}
+
+.habit-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--green);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.12s,
+    background 0.12s;
+  flex-shrink: 0;
+}
+.habit-item.done .habit-check {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.habit-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+.habit-streak {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── World Clocks ───────────────────────────────────────────────────────────── */
+
+.wc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.wc-row:last-child {
+  border-bottom: none;
+}
+.wc-city {
+  font-size: 14px;
+  color: var(--text);
+}
+.wc-time {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.wc-empty {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.wc-add-row {
+  display: flex;
+  gap: 8px;
+}
+.wc-select {
+  flex: 1;
+}
+.wc-add-btn {
+  padding: 9px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.wc-editor-label {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── Scratch Pad ────────────────────────────────────────────────────────────── */
+
+.scratch-input {
+  width: 100%;
+  min-height: 80px;
+  flex: 1;
+  resize: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-main);
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.scratch-input::placeholder {
+  color: var(--text-secondary);
+}
+.scratch-input:focus {
+  border-color: var(--accent);
+}
+
+/* ── Countdown ──────────────────────────────────────────────────────────────── */
+
+.countdown-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+.cd-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 56px;
+}
+.cd-num {
+  font-family: var(--font-mono);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1;
+}
+.cd-unit {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+.cd-sep {
+  font-size: 28px;
+  color: var(--text-secondary);
+  opacity: 0.3;
+  padding-bottom: 14px;
 }
 
 /* ── Settings Panel ─────────────────────────────────────────────────────────── */
@@ -298,14 +725,13 @@ body {
 .settings-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(2px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
   z-index: 90;
 }
-
 .settings-overlay.open {
   opacity: 1;
   pointer-events: all;
@@ -328,7 +754,6 @@ body {
   z-index: 100;
   overflow-y: auto;
 }
-
 .settings-panel.open {
   transform: translateX(0);
 }
@@ -356,7 +781,6 @@ body {
   justify-content: center;
   transition: background 0.12s;
 }
-
 .settings-close:hover {
   background: var(--surface-hover);
   color: var(--text);
@@ -376,7 +800,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ── Segmented Control ──────────────────────────────────────────────────────── */
+/* ── Segmented ──────────────────────────────────────────────────────────────── */
 
 .segmented {
   display: flex;
@@ -386,7 +810,6 @@ body {
   padding: 4px;
   border: 1px solid var(--border);
 }
-
 .seg-btn {
   flex: 1;
   padding: 7px 10px;
@@ -398,15 +821,15 @@ body {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
   white-space: nowrap;
 }
-
 .seg-btn:hover:not(.active) {
   background: var(--surface-hover);
   color: var(--text);
 }
-
 .seg-btn.active {
   background: var(--seg-active-bg);
   color: var(--seg-active-fg);
@@ -426,18 +849,36 @@ body {
   outline: none;
   transition: border-color 0.15s;
 }
-
 .settings-input:focus {
   border-color: var(--accent);
 }
-
 .settings-input::placeholder {
   color: var(--text-secondary);
 }
 
-/* ── Links Editor ───────────────────────────────────────────────────────────── */
+/* ── Toggle Rows ────────────────────────────────────────────────────────────── */
 
-.links-editor {
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px 0;
+}
+.toggle-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ── Links / Habits Editor ──────────────────────────────────────────────────── */
+
+.links-editor,
+#habitsEditor,
+#worldClocksEditor {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -468,9 +909,10 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
-
 .link-del:hover {
   background: #ef4444;
   border-color: #ef4444;
@@ -487,9 +929,10 @@ body {
   font-family: var(--font-main);
   font-size: 13px;
   cursor: pointer;
-  transition: border-color 0.12s, color 0.12s;
+  transition:
+    border-color 0.12s,
+    color 0.12s;
 }
-
 .add-link-btn:hover {
   border-color: var(--accent);
   color: var(--text);
@@ -497,8 +940,12 @@ body {
 
 /* ── Scrollbar ──────────────────────────────────────────────────────────────── */
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 99px;

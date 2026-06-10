@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -41,16 +41,19 @@
       <div class="settings-section">
         <div class="settings-label">Search Engine</div>
         <div class="segmented" id="searchSegmented">
-          <button class="seg-btn active" data-value="https://google.com/search?q=">Google</button>
-          <button class="seg-btn" data-value="https://duckduckgo.com/?q=">DDG</button>
-          <button class="seg-btn" data-value="https://bing.com/search?q=">Bing</button>
+          <button
+            class="seg-btn active"
+            data-value="https://google.com/search?q="
+          >
+            Google
+          </button>
+          <button class="seg-btn" data-value="https://duckduckgo.com/?q=">
+            DDG
+          </button>
+          <button class="seg-btn" data-value="https://bing.com/search?q=">
+            Bing
+          </button>
         </div>
-      </div>
-
-      <div class="settings-section">
-        <div class="settings-label">Quick Links</div>
-        <div class="links-editor" id="linksEditor"></div>
-        <button class="add-link-btn" id="addLinkBtn">+ Add link</button>
       </div>
 
       <div class="settings-section">
@@ -63,42 +66,225 @@
         </div>
       </div>
 
-      <div class="settings-section" id="nameSection">
-        <div class="settings-label">Name (for greeting)</div>
-        <input class="settings-input" id="nameInput" type="text" placeholder="Your name" maxlength="32" />
+      <div class="settings-section">
+        <div class="settings-label">Panels</div>
+        <div class="settings-hint">
+          Drag panels anywhere on the page. Resize from the bottom-right corner.
+        </div>
+        <div id="panelToggles"></div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Name</div>
+        <input
+          class="settings-input"
+          id="nameInput"
+          type="text"
+          placeholder="Your name"
+          maxlength="32"
+        />
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Focus Timer</div>
+        <div class="pomo-settings">
+          <div class="pomo-setting-row">
+            <span class="pomo-setting-label">Work</span>
+            <input
+              class="settings-input pomo-num-input"
+              id="pomoWorkInput"
+              type="number"
+              min="1"
+              max="120"
+            />
+            <span class="pomo-setting-unit">min</span>
+          </div>
+          <div class="pomo-setting-row">
+            <span class="pomo-setting-label">Break</span>
+            <input
+              class="settings-input pomo-num-input"
+              id="pomoBreakInput"
+              type="number"
+              min="1"
+              max="60"
+            />
+            <span class="pomo-setting-unit">min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Habits</div>
+        <div id="habitsEditor"></div>
+        <button class="add-link-btn" id="addHabitBtn">+ Add habit</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">World Clocks</div>
+        <div id="worldClocksEditor"></div>
+        <div class="wc-add-row">
+          <select class="settings-input wc-select" id="tzSelect"></select>
+          <button class="wc-add-btn" id="addTzBtn">Add</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Countdown Event</div>
+        <input
+          class="settings-input"
+          id="countdownEventInput"
+          type="text"
+          placeholder="Event name"
+          maxlength="40"
+        />
+        <input class="settings-input" id="countdownDateInput" type="date" />
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Quick Links</div>
+        <div class="settings-hint">
+          Press 1 - 9 to open the first 9 links instantly.
+        </div>
+        <div class="links-editor" id="linksEditor"></div>
+        <button class="add-link-btn" id="addLinkBtn">+ Add link</button>
       </div>
     </div>
 
-    <!-- Main content -->
+    <!-- Canvas -->
     <div class="page" id="page">
       <button class="gear-btn" id="gearBtn" title="Settings">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+          />
         </svg>
       </button>
 
+      <!-- Centered hero -->
       <div class="main">
         <div class="top-widget" id="topWidget"></div>
-
         <div class="clock" id="clock">00:00</div>
         <div class="date" id="date"></div>
-
         <div class="weather" id="weather">
           <span class="weather-icon" id="weatherIcon"></span>
           <span class="weather-text" id="weatherText"></span>
           <span class="weather-loc" id="weatherLoc"></span>
         </div>
-
         <form class="search-bar" id="searchForm" autocomplete="off">
-          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <svg
+            class="search-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <input class="search-input" id="searchInput" type="text" placeholder="Search..." spellcheck="false" />
+          <input
+            class="search-input"
+            id="searchInput"
+            type="text"
+            placeholder="Search or press / to focus..."
+            spellcheck="false"
+          />
         </form>
-
         <div class="quick-links" id="quickLinks"></div>
+      </div>
+
+      <!-- Floating panels (canvas) -->
+      <div class="panel" id="panel-intention">
+        <div class="panel-hd">
+          <span class="panel-title">Today's Todos</span>
+          <span class="panel-meta" id="intentionDate"></span>
+        </div>
+        <div class="panel-body">
+          <div class="todo-list" id="todoList"></div>
+          <form class="todo-add-form" id="todoAddForm" autocomplete="off">
+            <input
+              class="todo-add-input"
+              id="todoAddInput"
+              type="text"
+              placeholder="Add a task..."
+              maxlength="120"
+            />
+            <button class="todo-add-btn" type="submit">+</button>
+          </form>
+        </div>
+        <div class="resize-handle"></div>
+      </div>
+
+      <div class="panel" id="panel-pomodoro">
+        <div class="panel-hd">
+          <span class="panel-title">Focus Timer</span>
+          <span class="pomo-badge" id="pomoBadge" data-mode="work">Work</span>
+        </div>
+        <div class="panel-body">
+          <div class="pomo-timer" id="pomoTimer">25:00</div>
+          <div class="pomo-controls">
+            <button class="pomo-btn-primary" id="pomoToggleBtn">Start</button>
+            <button class="pomo-btn-ghost" id="pomoResetBtn">Reset</button>
+          </div>
+          <div class="pomo-dots" id="pomoDots"></div>
+        </div>
+        <div class="resize-handle"></div>
+      </div>
+
+      <div class="panel" id="panel-worldclocks">
+        <div class="panel-hd">
+          <span class="panel-title">World Clocks</span>
+        </div>
+        <div class="panel-body" id="worldClocksList"></div>
+        <div class="resize-handle"></div>
+      </div>
+
+      <div class="panel" id="panel-habits">
+        <div class="panel-hd">
+          <span class="panel-title">Habits</span>
+          <span class="panel-meta" id="habitsDate"></span>
+        </div>
+        <div class="panel-body">
+          <div class="habits-grid" id="habitsList"></div>
+        </div>
+        <div class="resize-handle"></div>
+      </div>
+
+      <div class="panel" id="panel-scratch">
+        <div class="panel-hd">
+          <span class="panel-title">Scratch Pad</span>
+        </div>
+        <div class="panel-body panel-body-fill">
+          <textarea
+            class="scratch-input"
+            id="scratchInput"
+            placeholder="Notes, thoughts, ideas..."
+          ></textarea>
+        </div>
+        <div class="resize-handle"></div>
+      </div>
+
+      <div class="panel" id="panel-countdown">
+        <div class="panel-hd">
+          <span class="panel-title" id="countdownTitle">Countdown</span>
+        </div>
+        <div class="panel-body">
+          <div class="countdown-display" id="countdownDisplay"></div>
+        </div>
+        <div class="resize-handle"></div>
       </div>
     </div>
 
