@@ -5,10 +5,11 @@ A minimal Chrome new tab extension - clock, weather, search, and productivity pa
 ## Screenshots
 
 ### Dark Mode
-<img width="640" alt="screenshot-dark" src="https://github.com/user-attachments/assets/257ef74b-bf50-42ae-b314-d42859aa73cd" />
+<img width="1920" height="987" alt="Screenshot 2026-06-11 at 11 16 22 PM" src="https://github.com/user-attachments/assets/f490bd55-95c6-4064-a47b-6d4bfddef984" />
 
 ### Light Mode
-<img width="640" alt="screenshot-light" src="https://github.com/user-attachments/assets/bd629069-98d1-4668-bacf-5ad65ea07889" />
+<img width="1920" height="995" alt="Screenshot 2026-06-11 at 11 17 21 PM" src="https://github.com/user-attachments/assets/3e10d810-5f75-486e-b70e-f184294d48fd" />
+
 
 ## Features
 
