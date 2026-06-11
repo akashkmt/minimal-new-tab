@@ -181,6 +181,16 @@ body {
   opacity: 0.35;
 }
 
+/* ── Greeting ───────────────────────────────────────────────────────────────── */
+
+.greeting {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  min-height: 1.4em;
+}
+
 /* ── Clock ──────────────────────────────────────────────────────────────────── */
 
 .clock {
@@ -684,6 +694,31 @@ body[data-theme="dark"] .pomo-badge[data-mode="break"] {
 .scratch-input:focus {
   border-color: var(--accent);
 }
+
+.scratch-toggle {
+  font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); cursor: pointer; font-family: var(--font-main);
+  transition: background 0.12s, color 0.12s;
+}
+.scratch-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+.scratch-preview {
+  flex: 1; overflow-y: auto; font-size: 14px; line-height: 1.7;
+  color: var(--text); padding: 4px 2px;
+}
+.scratch-preview h1 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.scratch-preview h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.scratch-preview h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.scratch-preview p  { margin-bottom: 8px; }
+.scratch-preview ul, .scratch-preview ol { padding-left: 18px; margin-bottom: 8px; }
+.scratch-preview li { margin-bottom: 2px; }
+.scratch-preview code { font-family: var(--font-mono); font-size: 12px; background: var(--surface); padding: 1px 5px; border-radius: 4px; }
+.scratch-preview blockquote { border-left: 3px solid var(--border); padding-left: 10px; color: var(--text-secondary); margin: 6px 0; }
+.scratch-preview hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+.scratch-preview s { opacity: 0.5; }
+.scratch-preview strong { font-weight: 600; }
+.scratch-preview em { font-style: italic; }
 
 /* ── Countdown ──────────────────────────────────────────────────────────────── */
 

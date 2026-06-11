@@ -100,8 +100,10 @@ function updateClock() {
   if (state.format === "12") {
     suffix = h >= 12 ? " PM" : " AM";
     h = h % 12 || 12;
+    clockEl.textContent = `${h}:${m}${suffix}`;
+  } else {
+    clockEl.textContent = `${String(h).padStart(2, "0")}:${m}`;
   }
-  clockEl.textContent = `${String(h).padStart(2, "0")}:${m}${suffix}`;
 }
 
 function updateDate() {
@@ -113,9 +115,18 @@ function updateDate() {
   });
 }
 
-setInterval(updateClock, 1000);
+function updateGreeting() {
+  const h = new Date().getHours();
+  const period = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
+  const name = state.name ? state.name.trim() : "";
+  const el = document.getElementById("greeting");
+  if (el) el.textContent = name ? `Good ${period}, ${name}.` : `Good ${period}.`;
+}
+
+setInterval(() => { updateClock(); updateTopWidget(); updateGreeting(); }, 1000);
 updateClock();
 updateDate();
+updateGreeting();
 
 // ── Top Widget ─────────────────────────────────────────────────────────────────
 
@@ -738,11 +749,66 @@ function renderWorldClocksEditor() {
 
 // ── Scratch Pad ────────────────────────────────────────────────────────────────
 
-const scratchInput = document.getElementById("scratchInput");
-scratchInput.addEventListener("input", () => {
-  state.scratch = scratchInput.value;
-  saveState();
-});
+function parseMd(raw) {
+  let html = raw
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    // headings
+    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
+    // bold / italic
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/_(.+?)_/g, "<em>$1</em>")
+    // inline code
+    .replace(/`(.+?)`/g, "<code>$1</code>")
+    // strikethrough
+    .replace(/~~(.+?)~~/g, "<s>$1</s>")
+    // unordered list items
+    .replace(/^[-*] (.+)$/gm, "<li>$1</li>")
+    // ordered list items
+    .replace(/^\d+\. (.+)$/gm, "<oli>$1</oli>")
+    // blockquote
+    .replace(/^&gt; (.+)$/gm, "<blockquote>$1</blockquote>")
+    // hr
+    .replace(/^---$/gm, "<hr>")
+    // line breaks → paragraphs (double newline)
+    .replace(/\n{2,}/g, "</p><p>")
+    .replace(/\n/g, "<br>");
+
+  // wrap li runs in <ul>, oli runs in <ol>
+  html = html.replace(/(<li>.*?<\/li>)+/gs, (m) => `<ul>${m}</ul>`);
+  html = html.replace(/(<oli>.*?<\/oli>)+/gs, (m) => `<ol>${m.replace(/<\/?oli>/g, (t) => t.replace("oli","li"))}</ol>`);
+
+  return `<p>${html}</p>`;
+}
+
+const scratchInput   = document.getElementById("scratchInput");
+const scratchPreview = document.getElementById("scratchPreview");
+const scratchToggle  = document.getElementById("scratchToggle");
+let scratchMode = "edit"; // "edit" | "preview"
+
+function renderScratchPreview() {
+  if (scratchPreview) scratchPreview.innerHTML = parseMd(state.scratch || "");
+}
+
+if (scratchInput) {
+  scratchInput.addEventListener("input", () => {
+    state.scratch = scratchInput.value;
+    saveState();
+    if (scratchMode === "preview") renderScratchPreview();
+  });
+}
+
+if (scratchToggle) {
+  scratchToggle.addEventListener("click", () => {
+    scratchMode = scratchMode === "edit" ? "preview" : "edit";
+    scratchToggle.textContent = scratchMode === "edit" ? "Preview" : "Edit";
+    scratchInput.style.display  = scratchMode === "edit"    ? "" : "none";
+    scratchPreview.style.display = scratchMode === "preview" ? "" : "none";
+    if (scratchMode === "preview") renderScratchPreview();
+  });
+}
 
 // ── Countdown ──────────────────────────────────────────────────────────────────
 
@@ -996,6 +1062,7 @@ const nameInput = document.getElementById("nameInput");
 nameInput.addEventListener("input", () => {
   state.name = nameInput.value;
   saveState();
+  updateGreeting();
 });
 
 // Pomodoro settings

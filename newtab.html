@@ -172,6 +172,7 @@
 
       <!-- Centered hero -->
       <div class="main">
+        <div class="greeting" id="greeting"></div>
         <div class="top-widget" id="topWidget"></div>
         <div class="clock" id="clock">00:00</div>
         <div class="date" id="date"></div>
@@ -266,13 +267,11 @@
       <div class="panel" id="panel-scratch">
         <div class="panel-hd">
           <span class="panel-title">Scratch Pad</span>
+          <button class="scratch-toggle" id="scratchToggle">Preview</button>
         </div>
         <div class="panel-body panel-body-fill">
-          <textarea
-            class="scratch-input"
-            id="scratchInput"
-            placeholder="Notes, thoughts, ideas..."
-          ></textarea>
+          <textarea class="scratch-input" id="scratchInput" placeholder="Markdown supported: **bold**, *italic*, # heading, - list..."></textarea>
+          <div class="scratch-preview" id="scratchPreview" style="display:none"></div>
         </div>
         <div class="resize-handle"></div>
       </div>
