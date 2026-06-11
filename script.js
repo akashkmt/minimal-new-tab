@@ -23,12 +23,12 @@ const PANEL_IDS = [
 
 // Default panel positions — spread across canvas, not overlapping
 const DEFAULT_PANEL_LAYOUT = {
-  intention: { x: 24, y: 24, w: 420, h: 100, visible: false },
-  pomodoro: { x: 24, y: 148, w: 260, h: 220, visible: false },
-  worldclocks: { x: 24, y: 392, w: 260, h: 180, visible: false },
-  habits: { x: 308, y: 148, w: 420, h: 200, visible: false },
-  scratch: { x: 308, y: 372, w: 420, h: 200, visible: false },
-  countdown: { x: 752, y: 148, w: 220, h: 160, visible: false },
+  intention:   { x: 24,  y: 24,  w: null, h: null, visible: false },
+  pomodoro:    { x: 24,  y: 148, w: null, h: null, visible: false },
+  worldclocks: { x: 24,  y: 392, w: null, h: null, visible: false },
+  habits:      { x: 308, y: 148, w: null, h: null, visible: false },
+  scratch:     { x: 308, y: 372, w: null, h: null, visible: false },
+  countdown:   { x: 752, y: 148, w: null, h: null, visible: false },
 };
 
 let state = {
@@ -44,6 +44,7 @@ let state = {
   habits: DEFAULT_HABITS,
   habitLog: {},
   worldClocks: [],
+  birthday: "",
   countdownEvent: "",
   countdownDate: "",
   scratch: "",
@@ -810,6 +811,33 @@ if (scratchToggle) {
   });
 }
 
+// ── Age Meter ─────────────────────────────────────────────────────────────────
+
+let ageMeterInterval = null;
+
+function updateAgeMeter() {
+  const meter = document.getElementById("ageMeter");
+  const display = document.getElementById("ageMeterValue");
+  if (ageMeterInterval) { clearInterval(ageMeterInterval); ageMeterInterval = null; }
+  if (!state.birthday) {
+    meter.style.display = "none";
+    return;
+  }
+  meter.style.display = "flex";
+  const born = new Date(state.birthday + "T00:00:00");
+  function tick() {
+    const now = new Date();
+    let y = now.getFullYear() - born.getFullYear();
+    let m = now.getMonth() - born.getMonth();
+    let d = now.getDate() - born.getDate();
+    if (d < 0) { m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+    if (m < 0) { y--; m += 12; }
+    display.textContent = `${y} years  ${m} months  ${d} days`;
+  }
+  tick();
+  ageMeterInterval = setInterval(tick, 1000);
+}
+
 // ── Countdown ──────────────────────────────────────────────────────────────────
 
 function updateCountdown() {
@@ -869,8 +897,8 @@ function applyLayout(id) {
   el.style.display = l.visible ? "flex" : "none";
   el.style.left = l.x + "px";
   el.style.top = l.y + "px";
-  el.style.width = l.w + "px";
-  el.style.minHeight = l.h + "px";
+  if (l.w != null) el.style.width = l.w + "px";
+  if (l.h != null) el.style.height = l.h + "px";
 }
 
 function applyPanels() {
@@ -919,15 +947,18 @@ function initDragResize() {
       const l = getLayout(id);
       const startX = e.clientX;
       const startY = e.clientY;
-      const startW = l.w;
-      const startH = l.h;
+      const startW = el.offsetWidth;
+      const startH = el.offsetHeight;
       el.classList.add("resizing");
 
       function onMove(ev) {
-        l.w = Math.max(MIN_W, startW + ev.clientX - startX);
-        l.h = Math.max(MIN_H, startH + ev.clientY - startY);
+        const cs = getComputedStyle(el);
+        const minW = parseInt(cs.minWidth) || MIN_W;
+        const minH = parseInt(cs.minHeight) || MIN_H;
+        l.w = Math.max(minW, startW + ev.clientX - startX);
+        l.h = Math.max(minH, startH + ev.clientY - startY);
         el.style.width = l.w + "px";
-        el.style.minHeight = l.h + "px";
+        el.style.height = l.h + "px";
       }
       function onUp() {
         el.classList.remove("resizing");
@@ -1164,6 +1195,21 @@ document.getElementById("addLinkBtn").addEventListener("click", () => {
   renderLinksEditor();
 });
 
+// Age meter settings
+const birthdayInput = document.getElementById("birthdayInput");
+const clearBirthdayBtn = document.getElementById("clearBirthdayBtn");
+birthdayInput.addEventListener("change", () => {
+  state.birthday = birthdayInput.value;
+  saveState();
+  updateAgeMeter();
+});
+clearBirthdayBtn.addEventListener("click", () => {
+  state.birthday = "";
+  birthdayInput.value = "";
+  saveState();
+  updateAgeMeter();
+});
+
 // Countdown settings
 const countdownEventInput = document.getElementById("countdownEventInput");
 const countdownDateInput = document.getElementById("countdownDateInput");
@@ -1195,6 +1241,7 @@ renderLinks();
 renderHabits();
 renderWorldClocks();
 updateCountdown();
+updateAgeMeter();
 fetchWeather();
 initIntention();
 populateTzSelect();
@@ -1203,6 +1250,7 @@ pomoState.remaining = state.pomoWork * 60;
 renderPomoUI();
 
 scratchInput.value = state.scratch;
+birthdayInput.value = state.birthday;
 countdownEventInput.value = state.countdownEvent;
 countdownDateInput.value = state.countdownDate;
 pomoWorkInput.value = state.pomoWork;

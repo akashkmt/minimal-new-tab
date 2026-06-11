@@ -129,6 +129,13 @@
       </div>
 
       <div class="settings-section">
+        <div class="settings-label">Age Meter</div>
+        <div class="settings-hint">Shows a subtle life-progress bar at the bottom of the page.</div>
+        <input class="settings-input" id="birthdayInput" type="date" placeholder="Your birthday" />
+        <button class="add-link-btn" id="clearBirthdayBtn" style="margin-top:6px">Remove</button>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-label">Countdown Event</div>
         <input
           class="settings-input"
@@ -285,6 +292,11 @@
         </div>
         <div class="resize-handle"></div>
       </div>
+    </div>
+
+    <!-- Age meter -->
+    <div class="age-meter" id="ageMeter">
+      <span class="age-meter-value" id="ageMeterValue"></span>
     </div>
 
     <script src="script.js"></script>

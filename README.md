@@ -20,6 +20,7 @@ A minimal Chrome new tab extension - clock, weather, search, and productivity pa
 - Quick links with keyboard shortcuts (keys `1`–`9`)
 - Greeting with custom name
 - Top widget: Day progress %, motivational quote, week number, or none
+- Age meter: live age display at page bottom (opt-in via birthday)
 
 **Panels** - draggable, resizable, toggle on/off
 | Panel | Description |
@@ -38,6 +39,7 @@ A minimal Chrome new tab extension - clock, weather, search, and productivity pa
 - Custom work/break durations for Focus Timer
 - Add/remove habits, world clock timezones, quick links
 - Named countdown event with target date
+- Birthday input for age meter (optional)
 
 ## Install
 
