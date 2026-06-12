@@ -23,12 +23,12 @@ const PANEL_IDS = [
 
 // Default panel positions — spread across canvas, not overlapping
 const DEFAULT_PANEL_LAYOUT = {
-  intention:   { x: 24,  y: 24,  w: null, h: null, visible: false },
-  pomodoro:    { x: 24,  y: 148, w: null, h: null, visible: false },
-  worldclocks: { x: 24,  y: 392, w: null, h: null, visible: false },
-  habits:      { x: 308, y: 148, w: null, h: null, visible: false },
-  scratch:     { x: 308, y: 372, w: null, h: null, visible: false },
-  countdown:   { x: 752, y: 148, w: null, h: null, visible: false },
+  intention: { x: 24, y: 24, w: null, h: null, visible: false },
+  pomodoro: { x: 24, y: 148, w: null, h: null, visible: false },
+  worldclocks: { x: 24, y: 392, w: null, h: null, visible: false },
+  habits: { x: 308, y: 148, w: null, h: null, visible: false },
+  scratch: { x: 308, y: 372, w: null, h: null, visible: false },
+  countdown: { x: 752, y: 148, w: null, h: null, visible: false },
 };
 
 let state = {
@@ -121,10 +121,15 @@ function updateGreeting() {
   const period = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
   const name = state.name ? state.name.trim() : "";
   const el = document.getElementById("greeting");
-  if (el) el.textContent = name ? `Good ${period}, ${name}.` : `Good ${period}.`;
+  if (el)
+    el.textContent = name ? `Good ${period}, ${name}.` : `Good ${period}.`;
 }
 
-setInterval(() => { updateClock(); updateTopWidget(); updateGreeting(); }, 1000);
+setInterval(() => {
+  updateClock();
+  updateTopWidget();
+  updateGreeting();
+}, 1000);
 updateClock();
 updateDate();
 updateGreeting();
@@ -427,7 +432,7 @@ function renderLinks() {
 function initIntention() {
   const today = todayKey();
   if (state.intentionDate !== today) {
-    state.todos = (state.todos || []).filter(t => !t.done);
+    state.todos = (state.todos || []).filter((t) => !t.done);
     state.intentionDate = today;
     saveState();
   }
@@ -751,53 +756,163 @@ function renderWorldClocksEditor() {
 // ── Scratch Pad ────────────────────────────────────────────────────────────────
 
 function parseMd(raw) {
-  let html = raw
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    // headings
-    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
-    // bold / italic
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/_(.+?)_/g, "<em>$1</em>")
-    // inline code
-    .replace(/`(.+?)`/g, "<code>$1</code>")
-    // strikethrough
-    .replace(/~~(.+?)~~/g, "<s>$1</s>")
-    // unordered list items
-    .replace(/^[-*] (.+)$/gm, "<li>$1</li>")
-    // ordered list items
-    .replace(/^\d+\. (.+)$/gm, "<oli>$1</oli>")
-    // blockquote
-    .replace(/^&gt; (.+)$/gm, "<blockquote>$1</blockquote>")
-    // hr
-    .replace(/^---$/gm, "<hr>")
-    // line breaks → paragraphs (double newline)
-    .replace(/\n{2,}/g, "</p><p>")
-    .replace(/\n/g, "<br>");
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function inline(s) {
+    return s
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/_(.+?)_/g, "<em>$1</em>")
+      .replace(/`(.+?)`/g, "<code>$1</code>")
+      .replace(/~~(.+?)~~/g, "<s>$1</s>");
+  }
 
-  // wrap li runs in <ul>, oli runs in <ol>
-  html = html.replace(/(<li>.*?<\/li>)+/gs, (m) => `<ul>${m}</ul>`);
-  html = html.replace(/(<oli>.*?<\/oli>)+/gs, (m) => `<ol>${m.replace(/<\/?oli>/g, (t) => t.replace("oli","li"))}</ol>`);
+  const lines = raw.split("\n");
+  let html = "";
+  let i = 0;
 
-  return `<p>${html}</p>`;
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (line.trim() === "") {
+      i++;
+      continue;
+    }
+
+    const h3 = line.match(/^### (.+)$/);
+    const h2 = line.match(/^## (.+)$/);
+    const h1 = line.match(/^# (.+)$/);
+    if (h3) {
+      html += `<h3>${inline(esc(h3[1]))}</h3>`;
+      i++;
+      continue;
+    }
+    if (h2) {
+      html += `<h2>${inline(esc(h2[1]))}</h2>`;
+      i++;
+      continue;
+    }
+    if (h1) {
+      html += `<h1>${inline(esc(h1[1]))}</h1>`;
+      i++;
+      continue;
+    }
+
+    if (line.trim() === "---") {
+      html += "<hr>";
+      i++;
+      continue;
+    }
+
+    if (line.startsWith("> ")) {
+      html += `<blockquote>${inline(esc(line.slice(2)))}</blockquote>`;
+      i++;
+      continue;
+    }
+
+    if (/^- \[[ xX]\] /.test(line) || /^\[[ xX]\] /.test(line)) {
+      const checkRe = /^(?:- )?\[[ xX]\] /;
+      html += '<ul class="checklist">';
+      while (
+        i < lines.length &&
+        (/^- \[[ xX]\] /.test(lines[i]) || /^\[[ xX]\] /.test(lines[i]))
+      ) {
+        const checked = /^(?:- )?\[[xX]\] /.test(lines[i]);
+        const text = lines[i].replace(checkRe, "");
+        html += `<li><input type="checkbox" data-line="${i}"${checked ? " checked" : ""}>${inline(esc(text))}</li>`;
+        i++;
+      }
+      html += "</ul>";
+      continue;
+    }
+
+    if (/^[-*] /.test(line)) {
+      html += "<ul>";
+      while (
+        i < lines.length &&
+        /^[-*] /.test(lines[i]) &&
+        !/^- \[[ xX]\] /.test(lines[i])
+      ) {
+        html += `<li>${inline(esc(lines[i].slice(2)))}</li>`;
+        i++;
+      }
+      html += "</ul>";
+      continue;
+    }
+
+    if (/^\d+\. /.test(line)) {
+      html += "<ol>";
+      while (i < lines.length && /^\d+\. /.test(lines[i])) {
+        const m = lines[i].match(/^\d+\. (.+)$/);
+        html += `<li>${inline(esc(m ? m[1] : ""))}</li>`;
+        i++;
+      }
+      html += "</ol>";
+      continue;
+    }
+
+    const parts = [];
+    while (i < lines.length) {
+      const l = lines[i];
+      if (l.trim() === "") break;
+      if (
+        /^#{1,3} /.test(l) ||
+        l.trim() === "---" ||
+        l.startsWith("> ") ||
+        /^[-*] /.test(l) ||
+        /^\d+\. /.test(l) ||
+        /^\[[ xX]\] /.test(l)
+      )
+        break;
+      parts.push(inline(esc(l)));
+      i++;
+    }
+    if (parts.length) html += `<p>${parts.join("<br>")}</p>`;
+  }
+
+  return html;
 }
 
-const scratchInput   = document.getElementById("scratchInput");
+const scratchInput = document.getElementById("scratchInput");
 const scratchPreview = document.getElementById("scratchPreview");
-const scratchToggle  = document.getElementById("scratchToggle");
+const scratchToggle = document.getElementById("scratchToggle");
 let scratchMode = "edit"; // "edit" | "preview"
 
 function renderScratchPreview() {
-  if (scratchPreview) scratchPreview.innerHTML = parseMd(state.scratch || "");
+  if (!scratchPreview) return;
+  scratchPreview.innerHTML = parseMd(state.scratch || "");
+  scratchPreview.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const lineIdx = parseInt(cb.dataset.line, 10);
+      const lines = state.scratch.split("\n");
+      if (cb.checked) {
+        lines[lineIdx] = lines[lineIdx].replace(/^((?:- )?)\[ \]/, "$1[x]");
+      } else {
+        lines[lineIdx] = lines[lineIdx].replace(/^((?:- )?)\[[xX]\]/, "$1[ ]");
+      }
+      state.scratch = lines.join("\n");
+      scratchInput.value = state.scratch;
+      saveState();
+      renderScratchPreview();
+    });
+  });
 }
 
 if (scratchInput) {
   scratchInput.addEventListener("input", () => {
     state.scratch = scratchInput.value;
     saveState();
-    if (scratchMode === "preview") renderScratchPreview();
+    if (scratchMode === "preview") {
+      if (!state.scratch.trim()) {
+        scratchMode = "edit";
+        scratchToggle.textContent = "Preview";
+        scratchInput.style.display = "";
+        scratchPreview.style.display = "none";
+      } else {
+        renderScratchPreview();
+      }
+    }
   });
 }
 
@@ -805,7 +920,7 @@ if (scratchToggle) {
   scratchToggle.addEventListener("click", () => {
     scratchMode = scratchMode === "edit" ? "preview" : "edit";
     scratchToggle.textContent = scratchMode === "edit" ? "Preview" : "Edit";
-    scratchInput.style.display  = scratchMode === "edit"    ? "" : "none";
+    scratchInput.style.display = scratchMode === "edit" ? "" : "none";
     scratchPreview.style.display = scratchMode === "preview" ? "" : "none";
     if (scratchMode === "preview") renderScratchPreview();
   });
@@ -818,7 +933,10 @@ let ageMeterInterval = null;
 function updateAgeMeter() {
   const meter = document.getElementById("ageMeter");
   const display = document.getElementById("ageMeterValue");
-  if (ageMeterInterval) { clearInterval(ageMeterInterval); ageMeterInterval = null; }
+  if (ageMeterInterval) {
+    clearInterval(ageMeterInterval);
+    ageMeterInterval = null;
+  }
   if (!state.birthday) {
     meter.style.display = "none";
     return;
@@ -830,8 +948,14 @@ function updateAgeMeter() {
     let y = now.getFullYear() - born.getFullYear();
     let m = now.getMonth() - born.getMonth();
     let d = now.getDate() - born.getDate();
-    if (d < 0) { m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
-    if (m < 0) { y--; m += 12; }
+    if (d < 0) {
+      m--;
+      d += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    }
+    if (m < 0) {
+      y--;
+      m += 12;
+    }
     display.textContent = `${y} years  ${m} months  ${d} days`;
   }
   tick();
@@ -1242,6 +1366,7 @@ renderHabits();
 renderWorldClocks();
 updateCountdown();
 updateAgeMeter();
+updateSpeedWidget();
 fetchWeather();
 initIntention();
 populateTzSelect();
@@ -1250,6 +1375,13 @@ pomoState.remaining = state.pomoWork * 60;
 renderPomoUI();
 
 scratchInput.value = state.scratch;
+if (state.scratch && state.scratch.trim()) {
+  scratchMode = "preview";
+  scratchToggle.textContent = "Edit";
+  scratchInput.style.display = "none";
+  scratchPreview.style.display = "";
+  renderScratchPreview();
+}
 birthdayInput.value = state.birthday;
 countdownEventInput.value = state.countdownEvent;
 countdownDateInput.value = state.countdownDate;

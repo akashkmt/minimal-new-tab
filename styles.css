@@ -384,12 +384,30 @@ body {
 }
 
 /* Per-panel minimum sizes to prevent content overflow */
-#panel-intention  { min-width: 280px; min-height: 160px; }
-#panel-pomodoro   { min-width: 220px; min-height: 210px; }
-#panel-worldclocks{ min-width: 200px; min-height: 100px; }
-#panel-habits     { min-width: 200px; min-height: 120px; }
-#panel-scratch    { min-width: 240px; min-height: 160px; }
-#panel-countdown  { min-width: 230px; min-height: 110px; }
+#panel-intention {
+  min-width: 280px;
+  min-height: 160px;
+}
+#panel-pomodoro {
+  min-width: 220px;
+  min-height: 210px;
+}
+#panel-worldclocks {
+  min-width: 200px;
+  min-height: 100px;
+}
+#panel-habits {
+  min-width: 200px;
+  min-height: 120px;
+}
+#panel-scratch {
+  min-width: 240px;
+  min-height: 160px;
+}
+#panel-countdown {
+  min-width: 230px;
+  min-height: 110px;
+}
 
 .resize-handle::after {
   content: "";
@@ -405,59 +423,128 @@ body {
 
 /* ── Todos ──────────────────────────────────────────────────────────────────── */
 
-.todo-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
 
 .todo-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 5px 4px; border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 4px;
+  border-radius: 8px;
   transition: background 0.1s;
 }
-.todo-row:hover { background: var(--surface-hover); }
-.todo-row:hover .todo-del { opacity: 1; }
+.todo-row:hover {
+  background: var(--surface-hover);
+}
+.todo-row:hover .todo-del {
+  opacity: 1;
+}
 
 .todo-check {
-  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
-  border: 1.5px solid var(--border); background: transparent;
-  color: #fff; font-size: 11px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.12s, border-color 0.12s;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
 }
-.todo-row.done .todo-check { background: var(--green); border-color: var(--green); }
+.todo-row.done .todo-check {
+  background: var(--green);
+  border-color: var(--green);
+}
 
 .todo-label {
-  flex: 1; font-size: 14px; color: var(--text); outline: none;
-  cursor: text; line-height: 1.4;
+  flex: 1;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  cursor: text;
+  line-height: 1.4;
 }
-.todo-row.done .todo-label { text-decoration: line-through; color: var(--text-secondary); }
+.todo-row.done .todo-label {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
 
 .todo-del {
-  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
-  border: none; background: transparent; color: var(--text-secondary);
-  font-size: 11px; cursor: pointer; opacity: 0;
-  transition: opacity 0.12s, color 0.12s;
-  display: flex; align-items: center; justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.12s,
+    color 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.todo-del:hover { color: #ef4444; }
+.todo-del:hover {
+  color: #ef4444;
+}
 
 .todo-add-form {
-  display: flex; gap: 6px; align-items: center;
-  border-top: 1px solid var(--border); padding-top: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
 }
 
 .todo-add-input {
-  flex: 1; background: transparent; border: none; outline: none;
-  font-family: var(--font-main); font-size: 13px; color: var(--text);
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-main);
+  font-size: 13px;
+  color: var(--text);
 }
-.todo-add-input::placeholder { color: var(--text-secondary); }
+.todo-add-input::placeholder {
+  color: var(--text-secondary);
+}
 
 .todo-add-btn {
-  width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text-secondary); font-size: 16px; cursor: pointer; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.12s, color 0.12s;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
-.todo-add-btn:hover { background: var(--accent); color: var(--accent-fg); }
+.todo-add-btn:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
 
 /* ── Pomodoro ───────────────────────────────────────────────────────────────── */
 
@@ -706,29 +793,103 @@ body[data-theme="dark"] .pomo-badge[data-mode="break"] {
 }
 
 .scratch-toggle {
-  font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text-secondary); cursor: pointer; font-family: var(--font-main);
-  transition: background 0.12s, color 0.12s;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
-.scratch-toggle:hover { background: var(--surface-hover); color: var(--text); }
+.scratch-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
 
 .scratch-preview {
-  flex: 1; overflow-y: auto; font-size: 14px; line-height: 1.7;
-  color: var(--text); padding: 4px 2px;
+  flex: 1;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 4px 2px;
 }
-.scratch-preview h1 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-.scratch-preview h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-.scratch-preview h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.scratch-preview p  { margin-bottom: 8px; }
-.scratch-preview ul, .scratch-preview ol { padding-left: 18px; margin-bottom: 8px; }
-.scratch-preview li { margin-bottom: 2px; }
-.scratch-preview code { font-family: var(--font-mono); font-size: 12px; background: var(--surface); padding: 1px 5px; border-radius: 4px; }
-.scratch-preview blockquote { border-left: 3px solid var(--border); padding-left: 10px; color: var(--text-secondary); margin: 6px 0; }
-.scratch-preview hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
-.scratch-preview s { opacity: 0.5; }
-.scratch-preview strong { font-weight: 600; }
-.scratch-preview em { font-style: italic; }
+.scratch-preview h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.scratch-preview h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.scratch-preview h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.scratch-preview p {
+  margin-bottom: 8px;
+}
+.scratch-preview ul,
+.scratch-preview ol {
+  padding-left: 18px;
+  margin-bottom: 8px;
+}
+.scratch-preview li {
+  margin-bottom: 2px;
+}
+.scratch-preview ul.checklist {
+  list-style: none;
+  padding-left: 2px;
+}
+.scratch-preview ul.checklist li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.scratch-preview ul.checklist input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.scratch-preview ul.checklist li:has(input:checked) {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+.scratch-preview code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--surface);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.scratch-preview blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 10px;
+  color: var(--text-secondary);
+  margin: 6px 0;
+}
+.scratch-preview hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 10px 0;
+}
+.scratch-preview s {
+  opacity: 0.5;
+}
+.scratch-preview strong {
+  font-weight: 600;
+}
+.scratch-preview em {
+  font-style: italic;
+}
 
 /* ── Countdown ──────────────────────────────────────────────────────────────── */
 
@@ -778,7 +939,7 @@ body[data-theme="dark"] .pomo-badge[data-mode="break"] {
 
 .age-meter-value {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--text-secondary);
   opacity: 0.35;
