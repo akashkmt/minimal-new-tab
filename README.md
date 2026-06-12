@@ -1,4 +1,4 @@
-# [Minimal > New Tab](https://chromewebstore.google.com/detail/minimal-%3E-new-tab/gdmkfjlfphjkiglangkfgkgbahgdkjhl)
+# [Minimal > New Tab](https://chromewebstore.google.com/detail/gdmkfjlfphjkiglangkfgkgbahgdkjhl)
 
 A minimal Chrome new tab extension - clock, weather, search, and productivity panels.
 
