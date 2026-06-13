@@ -97,11 +97,10 @@ function updateClock() {
   const now = new Date();
   let h = now.getHours();
   const m = String(now.getMinutes()).padStart(2, "0");
-  let suffix = "";
   if (state.format === "12") {
-    suffix = h >= 12 ? " PM" : " AM";
+    const period = h >= 12 ? "PM" : "AM";
     h = h % 12 || 12;
-    clockEl.textContent = `${h}:${m}${suffix}`;
+    clockEl.innerHTML = `${h}:${m}<span class="clock-period">${period}</span>`;
   } else {
     clockEl.textContent = `${String(h).padStart(2, "0")}:${m}`;
   }
