@@ -52,9 +52,12 @@ let state = {
   intentionDate: "",
 };
 
-function todayKey() {
-  const d = new Date();
+function dateKey(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function todayKey() {
+  return dateKey(new Date());
 }
 
 function loadState() {
@@ -126,9 +129,12 @@ function updateGreeting() {
 
 setInterval(() => {
   updateClock();
-  updateTopWidget();
   updateGreeting();
 }, 1000);
+setInterval(() => {
+  updateTopWidget();
+  updateDate();
+}, 60000);
 updateClock();
 updateDate();
 updateGreeting();
@@ -436,6 +442,13 @@ function initIntention() {
     saveState();
   }
   if (!state.todos) state.todos = [];
+  if (state.todos.length > 0) {
+    if (!state.panelLayout) state.panelLayout = {};
+    if (!state.panelLayout.intention) state.panelLayout.intention = { ...DEFAULT_PANEL_LAYOUT.intention };
+    state.panelLayout.intention.visible = true;
+    applyLayout("intention");
+    saveState();
+  }
   document.getElementById("intentionDate").textContent =
     new Date().toLocaleDateString("en-US", {
       weekday: "short",
@@ -655,11 +668,9 @@ function renderHabits() {
 function calcStreak(habitId) {
   let streak = 0;
   const d = new Date();
-  // start from yesterday so today's incomplete doesn't break streak
   d.setDate(d.getDate() - 1);
   while (streak < 365) {
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    if (state.habitLog[key]?.[habitId]) {
+    if (state.habitLog[dateKey(d)]?.[habitId]) {
       streak++;
       d.setDate(d.getDate() - 1);
     } else break;
@@ -709,7 +720,7 @@ function renderWorldClocks() {
   });
 }
 
-setInterval(renderWorldClocks, 1000);
+setInterval(renderWorldClocks, 60000);
 
 function populateTzSelect() {
   const sel = document.getElementById("tzSelect");
@@ -877,6 +888,11 @@ const scratchInput = document.getElementById("scratchInput");
 const scratchPreview = document.getElementById("scratchPreview");
 const scratchToggle = document.getElementById("scratchToggle");
 let scratchMode = "edit"; // "edit" | "preview"
+let scratchSaveTimer = null;
+function debouncedScratchSave() {
+  clearTimeout(scratchSaveTimer);
+  scratchSaveTimer = setTimeout(saveState, 300);
+}
 
 function renderScratchPreview() {
   if (!scratchPreview) return;
@@ -901,7 +917,7 @@ function renderScratchPreview() {
 if (scratchInput) {
   scratchInput.addEventListener("input", () => {
     state.scratch = scratchInput.value;
-    saveState();
+    debouncedScratchSave();
     if (scratchMode === "preview") {
       if (!state.scratch.trim()) {
         scratchMode = "edit";
@@ -1073,15 +1089,15 @@ function initDragResize() {
       const startW = el.offsetWidth;
       const startH = el.offsetHeight;
       el.classList.add("resizing");
+      const cs = getComputedStyle(el);
+      const minW = parseInt(cs.minWidth) || MIN_W;
+      const minH = parseInt(cs.minHeight) || MIN_H;
 
       function onMove(ev) {
-        const cs = getComputedStyle(el);
-        const minW = parseInt(cs.minWidth) || MIN_W;
-        const minH = parseInt(cs.minHeight) || MIN_H;
         l.w = Math.max(minW, startW + ev.clientX - startX);
         l.h = Math.max(minH, startH + ev.clientY - startY);
-        el.style.width = l.w + "px";
-        el.style.height = l.h + "px";
+        el.style.width = `${l.w}px`;
+        el.style.height = `${l.h}px`;
       }
       function onUp() {
         el.classList.remove("resizing");
@@ -1365,7 +1381,6 @@ renderHabits();
 renderWorldClocks();
 updateCountdown();
 updateAgeMeter();
-updateSpeedWidget();
 fetchWeather();
 initIntention();
 populateTzSelect();
@@ -1375,6 +1390,11 @@ renderPomoUI();
 
 scratchInput.value = state.scratch;
 if (state.scratch && state.scratch.trim()) {
+  if (!state.panelLayout) state.panelLayout = {};
+  if (!state.panelLayout.scratch) state.panelLayout.scratch = { ...DEFAULT_PANEL_LAYOUT.scratch };
+  state.panelLayout.scratch.visible = true;
+  applyLayout("scratch");
+  saveState();
   scratchMode = "preview";
   scratchToggle.textContent = "Edit";
   scratchInput.style.display = "none";
